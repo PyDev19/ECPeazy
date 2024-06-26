@@ -31,9 +31,6 @@
             case "Sai Sasank Achanta":
                 member_position = "Media Lead / Marketer";
                 break;
-            case "Jarir Ali":
-                member_position = "Media Manager / Content Creator / pookie wookie <3";
-                break;
         }
 
         if (prev_story === current_story) {
@@ -61,17 +58,6 @@
             but now, anyone can find this information for free! We hope you can 
             save yourself some stress and find from EC's easily!
         </p>
-        <!-- This project started out as an idea between 4 highschoolers who
-            wanted a way to find extracurricular activities to do in their free
-            time. We wanted to create a platform that would allow other students
-            to find extracurricular activities they could do in their free time
-            so that they wouldn't feel lost like we did. This is how we came up
-            with EC Peazy, a website that will help students find
-            extracurricular activities of their choosing. The name came from the
-            famous phrase "easy peasy lemon squeezy" which we thought was a fun
-            way to show how easy it is to find extracurricular activities on our
-            website.
-             -->
     </div>
 </section>
 <section class="h-full flex flex-col justify-center items-center">
@@ -104,7 +90,7 @@
                     src="yafizest1.jpg"
                     alt="Yafis Profile"
                     class="w-32 h-32 rounded-full mb-5 hover-effect"
-                />+
+                />
                 <h3 class="text-lg font-bold">Yafi Rahman</h3>
             </button>
             <button
@@ -128,17 +114,6 @@
                     class="w-32 h-32 rounded-full mb-5 hover-effect"
                 />
                 <h3 class="text-lg font-bold">Sai Achanta</h3>
-            </button>
-            <button
-                class="flex flex-col items-center hover-effect-btn"
-                on:click={() => show_story("Jarir Ali")}
-            >
-                <img
-                    src= "jarsad.jpg"
-                    alt="Jarir's Profile"
-                    class="w-32 h-32 rounded-full mb-5 hover-effect"
-                />
-                <h3 class="text-lg font-bold">Jarir Ali</h3>
             </button>
         </div>
 
