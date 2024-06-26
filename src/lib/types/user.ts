@@ -15,3 +15,13 @@ export type LoginUser = {
     credential: string;
     password: string;
 }
+
+export type GoogleUser = {
+    first_name: string;
+    middle_name: string;
+    last_name: string;
+    school: string;
+    age: string;
+    graduation_year: string;
+    username: string;
+}
