@@ -1,62 +1,33 @@
 <script lang="ts">
-    // import { SvelteComponent, onMount } from "svelte";
-    import {
-        firebase_auth,
-        firebase_firestore,
-    } from "$lib/firebase/firebase_app";
-    import { getDoc, doc } from "firebase/firestore";
-    import type { AuthError, User } from "firebase/auth";
+    import { onMount } from "svelte";
+    import { firebase_auth } from "$lib/firebase/firebase_app";
+    import type { User } from "firebase/auth";
     import { onAuthStateChanged } from "firebase/auth";
-    // import Modal from "$lib/components/Modal.svelte";
     import "../app.css";
 
-    let show_modal = false;
+    let show_profile = false;
+    let profile_image: string | null = "";
+    let show_menu = false;
 
-    // function user_logged_in(user: User) {
-    //     const uid = user.uid;
-    //     const user_doc = doc(firebase_firestore, "Users", uid);
+    function logout() {
+        firebase_auth.signOut();
+        show_profile = false;
+        window.location.href = "/login";
+    }
 
-    //     console.log(uid);
+    onMount(() => {
+        onAuthStateChanged(firebase_auth, (user: User | null) => {
+            if (user) {
+                firebase_auth.updateCurrentUser(user);
+                console.log("User, " + user.displayName + " is logged in");
 
-    //     getDoc(user_doc)
-    //         .then((doc) => {
-    //             console.log(doc);
-    //             if (doc.exists()) {
-    //                 console.log("Got User Document");
-    //                 const questionnaire_filled: boolean = doc.get(
-    //                     "questionnaire_filled",
-    //                 );
-
-    //                 if (!questionnaire_filled) {
-    //                     console.log(
-    //                         "User has not filled out questionnaire, redirecting",
-    //                     );
-    //                     if (window.location.pathname !== "/questionnaire") {
-    //                         show_modal = true;
-    //                     }
-    //                 } else {
-    //                     console.log("User has filled out questionnaire");
-    //                 }
-    //             } else {
-    //                 console.log("User Document does not exist");
-    //             }
-    //         })
-    //         .catch((error: AuthError) => {
-    //             console.error("Error: " + error.code + ": " + error.message);
-    //         });
-    // }
-
-    // onMount(() => {
-    //     onAuthStateChanged(firebase_auth, (user: User | null) => {
-    //         if (user) {
-    //             firebase_auth.updateCurrentUser(user);
-    //             user_logged_in(user);
-    //             console.log("User is logged in");
-    //         } else {
-    //             console.log("User is not logged in");
-    //         }
-    //     });
-    // });
+                show_profile = true;
+                profile_image = user.photoURL;
+            } else {
+                console.log("User is not logged in");
+            }
+        });
+    });
 </script>
 
 <div
@@ -67,17 +38,8 @@
 <div class="relative h-full overflow-y-scroll overflow-x-hidden z-10 font-sans">
     <!-- Nav Bar -->
     <div class="font-sans flex justify-center items-center mt-0 md:mt-2">
-        <div
-            class="bg-white p-1 rounded-full text-center opacity-80 w-[90%] flex items-center"
-        >
-            <a href="/"
-                ><img
-                    src="favicon.jpg"
-                    alt=""
-                    class="rounded-full"
-                    width="40"
-                /></a
-            >
+        <div class="bg-white p-1 rounded-full text-center opacity-80 w-[90%] flex items-center">
+            <a href="/"><img src="favicon.jpg" alt="" class="rounded-full" width="40" /></a>
             <h1 class="font-semibold text-lg mx-auto">
                 <a href="/">EC Peazy</a>
             </h1>
@@ -85,9 +47,37 @@
                 <a href="/home" class="mx-2">Home</a>
                 <a href="/about" class="mx-2">About Us</a>
                 <a href="/search" class="mx-2">Find ECs</a>
-                <a href="/signup" class="bg-[#9ecd67] rounded-full p-2 flex"
-                    >Sign Up <img src="chevron-right.svg" alt="" /></a
-                >
+                {#if show_profile}
+                    {#if profile_image}
+                        <button on:click={() => show_menu = !show_menu}>
+                            <img src={profile_image} alt="" class="rounded-full" width="40" />
+                        </button>
+                        {#if show_menu}
+                            <div class="flex flex-col absolute top-16 right-14 bg-white rounded-lg">
+                                <a href="/portfolio" class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-t-lg">
+                                    <img src="portfolio.svg" alt="portfolio" />
+                                    <p>Porfolio</p>
+                                </a>
+                                <a href="/settings" class="flex flex-row space-x-2 p-4 hover:bg-gray-200">
+                                    <img src="gear.svg" alt="settings" />
+                                    <p>Settings</p>
+                                </a>
+                                <button on:click={logout} class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-b-lg">
+                                    <img src="logout.svg" alt="logout" />
+                                    <p>Logout</p>
+                                </button>
+                            </div>
+                        {/if}
+                    {/if}
+                    {#if !profile_image}
+                        <a href="/profile"><img src="blank-profile.png" alt="" class="rounded-full" width="40" /></a>
+                    {/if}
+                {/if}
+                {#if !show_profile}
+                    <a href="/signup" class="bg-[#9ecd67] rounded-full p-2 flex">
+                        Sign Up <img src="chevron-right.svg" alt="" />
+                    </a>
+                {/if}
             </div>
         </div>
     </div>
