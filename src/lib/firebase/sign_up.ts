@@ -16,7 +16,17 @@ export async function sign_up(user: SignUpUser): Promise<boolean | AuthError> {
         console.log(current_user);
 
         const user_doc_ref = doc(firebase_firestore, 'Users', current_user.uid);
-        await setDoc(user_doc_ref, { questionnaire_filled: false });
+        await setDoc(user_doc_ref, {
+            sign_up_complete: false,
+            username: user.username,
+            email: user.email,
+            first_name: user.first_name,
+            middle_name: user.middle_name,
+            last_name: user.last_name,
+            school: user.school,
+            age: user.age,
+            graduation_year: user.graduation_year
+        });
 
         return true;
     }).catch((error: AuthError) => {
