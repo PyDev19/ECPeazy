@@ -3,10 +3,9 @@
     import { sign_up } from "$lib/firebase/sign_up";
     import BusyIndicator from "$lib/components/BusyIndicator.svelte";
     import { is_auth_error } from "$lib/type_checks";
-    import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
     import { firebase_auth } from "$lib/firebase/firebase_app";
-    import { type CredentialResponse } from "$lib/types/credentials";
     import { onMount } from "svelte";
+    import { google_sign_up } from "$lib/firebase/sign_up";
 
     let user: SignUpUser = {
         first_name: "",
@@ -138,21 +137,10 @@
         });
     }
 
-    function handle_google_auth(response: CredentialResponse) {
-        const credential = GoogleAuthProvider.credential(response.credential);
-
-        signInWithCredential(firebase_auth, credential).then((result) => {
-            firebase_auth.signOut();
-            window.location.href = "/login";
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
-
     onMount(() => {
         (<any>window).google.accounts.id.initialize({
             client_id: "162926619471-rdurosn21b96ur002q4vqqmd8uuauqvd",
-            callback: handle_google_auth,
+            callback: google_sign_up,
         });
         (<any>window).google.accounts.id.renderButton(
             document.getElementById("google_button"),
