@@ -117,6 +117,14 @@
                 on:click={activate_login}>Log In</button
             >
             <div id="google_button" class="mx-auto"></div>
+            <p class="text-gray-500 font-bold">
+                Don't have an account?
+            </p>
+            <a
+                href="/signup"
+                class="p-2 rounded-lg bg-blue-500 text-white max-w-[200px] mx-auto"
+                >Sign Up</a
+            >
         </form>
     </div>
 </section>
