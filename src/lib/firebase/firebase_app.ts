@@ -25,6 +25,7 @@ else {
 let firebase_auth: Auth = initializeAuth(firebase_app, {
     persistence: browserLocalPersistence
 });
+firebase_auth.useDeviceLanguage();
 let firebase_firestore: Firestore = getFirestore(firebase_app);
 
 export { firebase_app, firebase_auth, firebase_firestore }
