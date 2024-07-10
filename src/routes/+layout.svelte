@@ -38,8 +38,17 @@
 <div class="relative h-full overflow-y-scroll overflow-x-hidden z-10 font-sans">
     <!-- Nav Bar -->
     <div class="font-sans flex justify-center items-center mt-0 md:mt-2">
-        <div class="bg-white p-1 rounded-full text-center opacity-80 w-[90%] flex items-center">
-            <a href="/"><img src="favicon.jpg" alt="" class="rounded-full" width="40" /></a>
+        <div
+            class="bg-white p-1 rounded-full text-center opacity-80 w-[90%] flex items-center"
+        >
+            <a href="/"
+                ><img
+                    src="favicon.jpg"
+                    alt=""
+                    class="rounded-full"
+                    width="40"
+                /></a
+            >
             <h1 class="font-semibold text-lg mx-auto">
                 <a href="/">EC Peazy</a>
             </h1>
@@ -49,20 +58,36 @@
                 <a href="/search" class="mx-2">Find ECs</a>
                 {#if show_profile}
                     {#if profile_image}
-                        <button on:click={() => show_menu = !show_menu}>
-                            <img src={profile_image} alt="" class="rounded-full" width="40" />
+                        <button on:click={() => (show_menu = !show_menu)}>
+                            <img
+                                src={profile_image}
+                                alt=""
+                                class="rounded-full"
+                                width="40"
+                            />
                         </button>
                         {#if show_menu}
-                            <div class="flex flex-col absolute top-16 right-14 bg-white rounded-lg">
-                                <a href="/portfolio" class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-t-lg">
+                            <div
+                                class="flex flex-col absolute top-16 right-14 bg-white rounded-lg"
+                            >
+                                <a
+                                    href="/portfolio"
+                                    class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-t-lg"
+                                >
                                     <img src="portfolio.svg" alt="portfolio" />
                                     <p>Porfolio</p>
                                 </a>
-                                <a href="/settings" class="flex flex-row space-x-2 p-4 hover:bg-gray-200">
+                                <a
+                                    href="/settings"
+                                    class="flex flex-row space-x-2 p-4 hover:bg-gray-200"
+                                >
                                     <img src="gear.svg" alt="settings" />
                                     <p>Settings</p>
                                 </a>
-                                <button on:click={logout} class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-b-lg">
+                                <button
+                                    on:click={logout}
+                                    class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-b-lg"
+                                >
                                     <img src="logout.svg" alt="logout" />
                                     <p>Logout</p>
                                 </button>
@@ -70,11 +95,21 @@
                         {/if}
                     {/if}
                     {#if !profile_image}
-                        <a href="/profile"><img src="blank-profile.png" alt="" class="rounded-full" width="40" /></a>
+                        <a href="/profile"
+                            ><img
+                                src="blank-profile.png"
+                                alt=""
+                                class="rounded-full"
+                                width="40"
+                            /></a
+                        >
                     {/if}
                 {/if}
                 {#if !show_profile}
-                    <a href="/signup" class="bg-[#9ecd67] rounded-full p-2 flex">
+                    <a
+                        href="/signup"
+                        class="bg-[#9ecd67] rounded-full p-2 flex"
+                    >
                         Sign Up <img src="chevron-right.svg" alt="" />
                     </a>
                 {/if}

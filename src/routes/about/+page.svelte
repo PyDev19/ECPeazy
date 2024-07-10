@@ -27,7 +27,7 @@
                 break;
             case "Atharva Mishra":
                 member_position = "Full Stack Developer / Head Developer";
-                break; 
+                break;
             case "Sai Sasank Achanta":
                 member_position = "Media Lead / Marketer";
                 break;
@@ -42,6 +42,10 @@
     }
 </script>
 
+<svelte:head>
+    <title>About Us</title>
+</svelte:head>
+
 <section class="h-full flex flex-col justify-center items-center">
     <div class="opacity-bg p-5 rounded-lg text-center w-[90%]">
         <h2 class="text-2xl md:text-4xl font-bold text-center mb-5">
@@ -51,12 +55,12 @@
             >
         </h2>
         <p class="text-gray-700 text-center mb-3 text-sm md:text-base">
-            Highschool often comes with a lot of worry, 
-            especially about college and making friends. This project 
-            came about as a possible solution to this stress. Clubs, competitions, 
-            and new oppurtinies are all things that we had to ask friends for, 
-            but now, anyone can find this information for free! We hope you can 
-            save yourself some stress and find from EC's easily!
+            Highschool often comes with a lot of worry, especially about college
+            and making friends. This project came about as a possible solution
+            to this stress. Clubs, competitions, and new oppurtinies are all
+            things that we had to ask friends for, but now, anyone can find this
+            information for free! We hope you can save yourself some stress and
+            find from EC's easily!
         </p>
     </div>
 </section>

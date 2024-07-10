@@ -154,11 +154,15 @@
                 height: 100,
                 longtitle: true,
                 use_fedcm_for_prompt: false,
-            }
+            },
         );
         (<any>window).google.accounts.id.prompt();
     });
 </script>
+
+<svelte:head>
+    <title>Sign Up</title>
+</svelte:head>
 
 <BusyIndicator show={show_indicator} message={modal_message} />
 

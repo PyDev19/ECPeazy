@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>ECPeazy</title>
+</svelte:head>
+
 <!-- Tag Line -->
 <section class="h-full flex flex-col justify-center items-center">
     <div class="opacity-bg p-5 rounded-lg text-center w-[90%]">
@@ -214,7 +218,7 @@
     .feature {
         height: 200px;
     }
-    
+
     .socials:hover {
         box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
         transform: scale(1.05);

@@ -17,9 +17,9 @@
     onAuthStateChanged(firebase_auth, (result) => {
         if (!result) {
             // window.location.href = "/signup";
-            console.log("No user")
+            console.log("No user");
         } else {
-            console.log("User exists")
+            console.log("User exists");
             user.username = result.displayName || "";
         }
     });
@@ -66,10 +66,19 @@
     }
 </script>
 
+<svelte:head>
+    <title>Sign Up - Google</title>
+</svelte:head>
+
 <section class="h-full flex flex-col justify-center items-center font-sans">
     <div class="opacity-bg p-5 rounded-lg text-center sm:w-[90%] md:w-[70%]">
-        <h1 class="text-[3em] text-[#FFEB3B] m-0">Finish Signing Up with Google</h1>
-        <p class="text-md text-gray-500 mb-2">You're almost there! Just a few more details to complete your account.</p>
+        <h1 class="text-[3em] text-[#FFEB3B] m-0">
+            Finish Signing Up with Google
+        </h1>
+        <p class="text-md text-gray-500 mb-2">
+            You're almost there! Just a few more details to complete your
+            account.
+        </p>
 
         <div class="transition-container">
             <div class="form-slide">
@@ -129,7 +138,9 @@
                         name="graduation_year"
                     />
                     {#if show_error}
-                        <p class="text-red-500">Please fill out all the required fields.</p>
+                        <p class="text-red-500">
+                            Please fill out all the required fields.
+                        </p>
                     {/if}
                     <button
                         type="button"

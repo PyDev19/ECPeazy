@@ -1,8 +1,8 @@
 <script lang="ts">
     import { type LoginUser } from "$lib/types/user";
     import BusyIndicator from "$lib/components/BusyIndicator.svelte";
-    import { login } from "$lib/firebase/login"
-    import {is_auth_error} from "$lib/type_checks";
+    import { login } from "$lib/firebase/login";
+    import { is_auth_error } from "$lib/type_checks";
     import { onMount } from "svelte";
     import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
     import { firebase_auth } from "$lib/firebase/firebase_app";
@@ -10,7 +10,7 @@
 
     let user: LoginUser = {
         credential: "",
-        password: ""
+        password: "",
     };
 
     let show_error = false;
@@ -26,7 +26,7 @@
             show_error = true;
             message = "Please fill in all fields.";
             return;
-        } else if (!email_regex.test(user.credential))  {
+        } else if (!email_regex.test(user.credential)) {
             show_error = true;
             message = "Please enter a valid e-mail address.";
             return;
@@ -36,32 +36,36 @@
         show_error = false;
         message = "";
 
-        login(user.credential, user.password).then((result) => {
-            if (is_auth_error(result)) {
-                show_error = true;
-                message = result.message;
-                show_modal = false;
+        login(user.credential, user.password)
+            .then((result) => {
+                if (is_auth_error(result)) {
+                    show_error = true;
+                    message = result.message;
+                    show_modal = false;
 
-                return;
-            } else {
-                show_modal = false;
-                window.location.href = "/";
-            }
-        }).catch((error) => {
-            console.log("Unknow error occured")
-        });
+                    return;
+                } else {
+                    show_modal = false;
+                    window.location.href = "/";
+                }
+            })
+            .catch((error) => {
+                console.log("Unknow error occured");
+            });
     }
 
     function handle_google_auth(response: CredentialResponse) {
         const credential = GoogleAuthProvider.credential(response.credential);
 
-        signInWithCredential(firebase_auth, credential).then((result) => {
-            const user = result.user;
-            firebase_auth.updateCurrentUser(user);
-            window.location.href = "/home";
-        }).catch((error) => {
-            console.log(error);
-        });
+        signInWithCredential(firebase_auth, credential)
+            .then((result) => {
+                const user = result.user;
+                firebase_auth.updateCurrentUser(user);
+                window.location.href = "/home";
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     onMount(() => {
@@ -81,11 +85,15 @@
                 height: 100,
                 longtitle: true,
                 use_fedcm_for_prompt: false,
-            }
+            },
         );
         (<any>window).google.accounts.id.prompt();
     });
 </script>
+
+<svelte:head>
+    <title>Login</title>
+</svelte:head>
 
 <BusyIndicator show={show_modal} message={modal_message} />
 
@@ -117,9 +125,7 @@
                 on:click={activate_login}>Log In</button
             >
             <div id="google_button" class="mx-auto"></div>
-            <p class="text-gray-500 font-bold">
-                Don't have an account?
-            </p>
+            <p class="text-gray-500 font-bold">Don't have an account?</p>
             <a
                 href="/signup"
                 class="p-2 rounded-lg bg-blue-500 text-white max-w-[200px] mx-auto"
