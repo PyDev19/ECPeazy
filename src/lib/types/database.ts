@@ -1,10 +1,14 @@
 export type EC = {
     name: string,
-    fields: string[],
-    difficulty: string,
-    description: string,
-    type: string,
     time_commitment: string,
-    keywords: string[],
+    website: string,
+    team_individual: string,
+    subjects: string[],
+    skill_levels: string[],
+    org_types: string[],
+    locations: string[],
     image: string,
+    grades: string[],
+    description: string,
+    categories: string
 }
