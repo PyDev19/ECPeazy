@@ -1,7 +1,6 @@
 import { getDocs, collection, query, where, type FirestoreError } from 'firebase/firestore';
 import { firebase_firestore } from './firebase/firebase_app';
 import { type EC } from '$lib/types/database';
-import {TfIdf} from 'natural/lib/natural/tfidf';
 
 function find_ec(subject: string, difficulty: string) {
     console.log("Finding ECs...");
@@ -27,18 +26,18 @@ function find_ec(subject: string, difficulty: string) {
 function calculate_relevance(ec: EC, query: String): number {
     let score = 0;
     const query_lower = query.toLowerCase();
-    
+
     // Check if the EC name contains the query
     if (ec.name.toLowerCase().includes(query_lower)) {
         score += 2; // Higher weight for name match
     }
 
-    // Check if any of the keywords contain the query
-    for (const keyword of ec.keywords) {
-        if (keyword.toLowerCase().includes(query_lower)) {
-            score += 1; // Lower weight for keyword match
-        }
-    }
+    // // Check if any of the keywords contain the query
+    // for (const keyword of ec.keywords) {
+    //     if (keyword.toLowerCase().includes(query_lower)) {
+    //         score += 1; // Lower weight for keyword match
+    //     }
+    // }
 
     return score;
 }
@@ -64,10 +63,13 @@ export async function keyword_search(query: string): Promise<EC[] | boolean | Fi
         });
 
         // Check if all relevance scores are 0
-        const allScoresZero = Object.values(results).every(score => score === 0);
-        if (allScoresZero) {
+        const all_scores_zero = Object.values(results).every(score => score === 0);
+        console.log(all_scores_zero)
+        if (all_scores_zero) {
             return false; // Return false if all scores are 0
         }
+
+        console.log(results)
 
         // Sort the ECs by relevance
         ecs.sort((a, b) => results[b.name] - results[a.name]);
