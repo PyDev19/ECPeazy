@@ -4,13 +4,13 @@ import { getFirestore, type Firestore } from 'firebase/firestore';
 import { browserLocalPersistence, type AuthError } from 'firebase/auth';
 
 const config = {
-    apiKey: "AIzaSyBTWXwvJYNjNp1RGbC0-3tDZG3nhWtlPQg",
-    authDomain: "ecpeazy.firebaseapp.com",
-    projectId: "ecpeazy",
-    storageBucket: "ecpeazy.appspot.com",
-    messagingSenderId: "162926619471",
-    appId: "1:162926619471:web:e86570c6bca947e27ab33a",
-    measurementId: "G-ZRQ18PHNJ7"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 let firebase_app: FirebaseApp | undefined;
