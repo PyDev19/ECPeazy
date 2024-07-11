@@ -85,7 +85,6 @@
         <p class="text-gray-500 text-md mb-2">
             Welcome to your one stop spot for finding ECs
         </p>
-        <Carousel interval={3000} items={carouselItems}></Carousel>
     </div>
 </section>
 
