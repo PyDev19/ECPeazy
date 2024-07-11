@@ -32,6 +32,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"natural": "^7.0.6"
+		"svelte-drawer-component": "^1.2.2"
 	}
 }
