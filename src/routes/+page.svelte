@@ -7,10 +7,12 @@
     <div class="opacity-bg p-5 rounded-lg text-center w-[90%]">
         <h1 class="text-[3em] text-[#FFEB3B] m-0 tagline">Discover Your Passion, Shape Your Future</h1>
         <p class="text-[1.5em] text-[#8BC34A] mt-[10px]">Your Gateway to Exciting Extracurricular Opportunities</p>
-        <a
-            href="/search"
+        <button
+            on:click={() => {
+                window.location.href = "/search";
+            }}
             class="bg-[#FFEB3B] py-2.5 px-3 rounded-md hover:bg-yellow-400 mt-2 text-[1em] shadow-md text-[#8BC34A] font-semibold opacity-100"
-            >Explore Extracurricular Activities"</a
+            >Explore Extracurricular Activities"</button
         >
     </div>
 </section>
