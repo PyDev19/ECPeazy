@@ -2,6 +2,7 @@
     import { firebase_auth } from "$lib/firebase/firebase_app";
     import { onAuthStateChanged } from "firebase/auth";
     import Carousel from "$lib/components/Carousel.svelte";
+    import { onMount } from "svelte";
 
     let rec_div: HTMLElement | null = null;
 
@@ -59,6 +60,14 @@
         "<img src='image2.jpg' alt='Image 2' />",
         "<img src='image3.jpg' alt='Image 3' />",
     ];
+
+    onMount(() => {
+        onAuthStateChanged(firebase_auth, (user) => {
+            if (!user) {
+                window.location.href = "/login";
+            }
+        });
+    });
 </script>
 
 <svelte:head>
