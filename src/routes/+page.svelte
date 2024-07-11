@@ -1,7 +1,3 @@
-<script>
-    import { base } from "$app/paths";
-</script>
-
 <svelte:head>
     <title>ECPeazy</title>
 </svelte:head>
@@ -12,7 +8,7 @@
         <h1 class="text-[3em] text-[#FFEB3B] m-0 tagline">Discover Your Passion, Shape Your Future</h1>
         <p class="text-[1.5em] text-[#8BC34A] mt-[10px]">Your Gateway to Exciting Extracurricular Opportunities</p>
         <a
-            href="{base}/search"
+            href="/search"
             class="bg-[#FFEB3B] py-2.5 px-3 rounded-md hover:bg-yellow-400 mt-2 text-[1em] shadow-md text-[#8BC34A] font-semibold opacity-100"
             >Explore Extracurricular Activities"</a
         >

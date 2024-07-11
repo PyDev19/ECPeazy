@@ -4,7 +4,6 @@ import { doc, setDoc } from 'firebase/firestore';
 import type { GoogleUser, SignUpUser } from '$lib/types/user';
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import { type CredentialResponse } from "$lib/types/credentials";
-import { base } from '$app/paths';
 
 export async function sign_up(user: SignUpUser): Promise<boolean | AuthError> {
     return createUserWithEmailAndPassword(firebase_auth, user.email, user.password).then(async (user_credential) => {
@@ -50,7 +49,7 @@ export async function google_sign_up(response: CredentialResponse) {
             email: user.email,
         });
 
-        window.location.href = base + "/signup/google_complete";
+        window.location.href = "/signup/google_complete";
     }).catch((error) => {
         console.log(error);
     });
@@ -77,5 +76,5 @@ export async function google_sign_up_complete(user: GoogleUser) {
     });
 
     firebase_auth.signOut()
-    window.location.href = base + "/login";
+    window.location.href = "/login";
 }

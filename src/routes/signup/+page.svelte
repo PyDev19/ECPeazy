@@ -6,7 +6,6 @@
     import { firebase_auth } from "$lib/firebase/firebase_app";
     import { onMount } from "svelte";
     import { google_sign_up } from "$lib/firebase/sign_up";
-    import { base } from "$app/paths";
 
     let user: SignUpUser = {
         first_name: "",
@@ -133,7 +132,7 @@
                 message = result.message;
             } else {
                 firebase_auth.signOut();
-                window.location.href = base + "/login";
+                window.location.href = "/login";
             }
         });
     }
@@ -241,7 +240,7 @@
                                 Already have an account?
                             </p>
                             <a
-                                href="{base}/login"
+                                href="/login"
                                 class="p-2 rounded-lg bg-blue-500 text-white max-w-[200px] mx-auto"
                                 >Login</a
                             >

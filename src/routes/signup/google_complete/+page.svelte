@@ -3,7 +3,6 @@
     import { google_sign_up_complete } from "$lib/firebase/sign_up";
     import { onAuthStateChanged } from "firebase/auth";
     import { firebase_auth } from "$lib/firebase/firebase_app";
-    import { base } from "$app/paths";
 
     let user: GoogleUser = {
         first_name: "",
@@ -17,7 +16,7 @@
 
     onAuthStateChanged(firebase_auth, (result) => {
         if (!result) {
-            window.location.href = base + "/signup";
+            window.location.href = "/signup";
             console.log("No user");
         } else {
             console.log("User exists");

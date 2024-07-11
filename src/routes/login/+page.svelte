@@ -7,7 +7,6 @@
     import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
     import { firebase_auth } from "$lib/firebase/firebase_app";
     import { type CredentialResponse } from "$lib/types/credentials";
-    import { base } from "$app/paths";
 
     let user: LoginUser = {
         credential: "",
@@ -47,7 +46,7 @@
                     return;
                 } else {
                     show_modal = false;
-                    window.location.href = base + "/";
+                    window.location.href = "/";
                 }
             })
             .catch((error) => {
@@ -62,7 +61,7 @@
             .then((result) => {
                 const user = result.user;
                 firebase_auth.updateCurrentUser(user);
-                window.location.href = base + "/home";
+                window.location.href = "/home";
             })
             .catch((error) => {
                 console.log(error);
@@ -128,7 +127,7 @@
             <div id="google_button" class="mx-auto"></div>
             <p class="text-gray-500 font-bold">Don't have an account?</p>
             <a
-                href="{base}/signup"
+                href="/signup"
                 class="p-2 rounded-lg bg-blue-500 text-white max-w-[200px] mx-auto"
                 >Sign Up</a
             >

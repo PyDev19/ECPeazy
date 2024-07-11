@@ -3,7 +3,6 @@
     import { firebase_auth } from "$lib/firebase/firebase_app";
     import type { User } from "firebase/auth";
     import { onAuthStateChanged } from "firebase/auth";
-    import { base } from "$app/paths";
     import "../app.css";
 
     let show_profile = false;
@@ -13,7 +12,7 @@
     function logout() {
         firebase_auth.signOut();
         show_profile = false;
-        window.location.href = base + "/login";
+        window.location.href = "/login";
     }
 
     onMount(() => {
@@ -42,7 +41,7 @@
         <div
             class="bg-white p-1 rounded-full text-center opacity-80 w-[90%] flex items-center"
         >
-            <a href="{base}/"
+            <a href="/"
                 ><img
                     src="favicon.jpg"
                     alt=""
@@ -51,12 +50,12 @@
                 /></a
             >
             <h1 class="font-semibold text-lg mx-auto">
-                <a href="{base}/">EC Peazy</a>
+                <a href="/">EC Peazy</a>
             </h1>
             <div class="flex space-x-4 mr-1 justify-center items-center">
-                <a href="{base}/home" class="mx-2">Home</a>
-                <a href="{base}/about" class="mx-2">About Us</a>
-                <a href="{base}/search" class="mx-2">Find ECs</a>
+                <a href="/home" class="mx-2">Home</a>
+                <a href="/about" class="mx-2">About Us</a>
+                <a href="/search" class="mx-2">Find ECs</a>
                 {#if show_profile}
                     {#if profile_image}
                         <button on:click={() => (show_menu = !show_menu)}>
@@ -72,14 +71,14 @@
                                 class="flex flex-col absolute top-16 right-14 bg-white rounded-lg"
                             >
                                 <a
-                                    href="{base}/portfolio"
+                                    href="/portfolio"
                                     class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-t-lg"
                                 >
                                     <img src="portfolio.svg" alt="portfolio" />
                                     <p>Porfolio</p>
                                 </a>
                                 <a
-                                    href="{base}/settings"
+                                    href="/settings"
                                     class="flex flex-row space-x-2 p-4 hover:bg-gray-200"
                                 >
                                     <img src="gear.svg" alt="settings" />
@@ -96,7 +95,7 @@
                         {/if}
                     {/if}
                     {#if !profile_image}
-                        <a href="{base}/profile"
+                        <a href="/profile"
                             ><img
                                 src="blank-profile.png"
                                 alt=""
@@ -108,7 +107,7 @@
                 {/if}
                 {#if !show_profile}
                     <a
-                        href="{base}/signup"
+                        href="/signup"
                         class="bg-[#9ecd67] rounded-full p-2 flex"
                     >
                         Sign Up <img src="chevron-right.svg" alt="" />
