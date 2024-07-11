@@ -140,7 +140,7 @@
 
     onMount(() => {
         (<any>window).google.accounts.id.initialize({
-            client_id: '162926619471-rdurosn21b96ur002q4vqqmd8uuauqvd',
+            client_id: process.env.GOOGLE_ID,
             callback: google_sign_up,
         });
         (<any>window).google.accounts.id.renderButton(
