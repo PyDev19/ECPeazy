@@ -1,11 +1,11 @@
 import { firebase_auth, firebase_firestore } from '$lib/firebase/firebase_app';
-import { createUserWithEmailAndPassword, updateProfile, type AuthError } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile, type AuthError, type User } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import type { GoogleUser, SignUpUser } from '$lib/types/user';
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import { type CredentialResponse } from "$lib/types/credentials";
 
-export async function sign_up(user: SignUpUser): Promise<boolean | AuthError> {
+export async function sign_up(user: SignUpUser): Promise<User | AuthError> {
     return createUserWithEmailAndPassword(firebase_auth, user.email, user.password).then(async (user_credential) => {
         const current_user = user_credential.user;
 
@@ -30,7 +30,7 @@ export async function sign_up(user: SignUpUser): Promise<boolean | AuthError> {
             graduation_year: user.graduation_year
         });
 
-        return true;
+        return user_credential.user;
     }).catch((error: AuthError) => {
         console.log(error.code, error.message);
 
