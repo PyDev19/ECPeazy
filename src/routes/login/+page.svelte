@@ -60,8 +60,9 @@
         signInWithCredential(firebase_auth, credential)
             .then((result) => {
                 const user = result.user;
-                firebase_auth.updateCurrentUser(user);
-                window.location.href = "/home";
+                firebase_auth.updateCurrentUser(user).then(() => {
+                    window.location.href = "/home";
+                });
             })
             .catch((error) => {
                 console.log(error);
