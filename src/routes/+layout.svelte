@@ -77,13 +77,13 @@
                                     <img src="portfolio.svg" alt="portfolio" />
                                     <p>Porfolio</p>
                                 </a>
-                                <a
+                                <!-- <a
                                     href="/settings"
                                     class="flex flex-row space-x-2 p-4 hover:bg-gray-200"
                                 >
                                     <img src="gear.svg" alt="settings" />
                                     <p>Settings</p>
-                                </a>
+                                </a> -->
                                 <button
                                     on:click={logout}
                                     class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-b-lg"
