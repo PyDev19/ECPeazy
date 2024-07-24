@@ -121,6 +121,7 @@
         if (user.password !== user.confirm_password) {
             message = "Passwords do not match.";
             show_error = true;
+            show_indicator = false;
             return;
         }
 
