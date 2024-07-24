@@ -5,6 +5,7 @@
     import { onAuthStateChanged } from "firebase/auth";
     import "../app.css";
 
+
     let show_profile = false;
     let profile_image: string | null = "";
     let show_menu = false;
