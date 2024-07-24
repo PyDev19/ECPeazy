@@ -12,3 +12,5 @@ export type EC = {
     description: string,
     categories: string
 }
+
+export type Portfolio = [{ activity: string, description: string }]
