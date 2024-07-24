@@ -1,21 +1,29 @@
 <script lang="ts">
     import { onAuthStateChanged, type User } from "firebase/auth";
     import { firebase_auth, firebase_firestore } from "$lib/firebase/firebase_app";
-    import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+    import { doc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
     import { onMount } from "svelte";
     import { get_all_ecs } from "$lib/firebase/get_all_ecs";
-    import type { EC } from "$lib/types/database";
+    import type { EC, Portfolio } from "$lib/types/database";
+    import BusyIndicator from "$lib/components/BusyIndicator.svelte";
 
     let user: User | null = null;
     let first_name = "";
     let last_name = "";
     let middle_name = "";
     let show_modal = false;
+    let show_recommendation = false;
 
     let selected_activity = "";
     let description = "";
 
     let cache_ecs: { data: EC[] } = { data: [] };
+    let portfolio: any[] = [];
+
+    let show_indicator = false;
+    let modal_message = "Getting Recommendations...";
+
+    let recommendation: EC[] = [];
 
     onMount(() => {
         onAuthStateChanged(firebase_auth, (_user) => {
@@ -38,6 +46,15 @@
                     .catch((error) => {
                         console.error("Error getting document:", error);
                     });
+
+                getDoc(doc(firebase_firestore, "Portfolios", user.uid)).then((doc) => {
+                    if (doc.exists()) {
+                        const activities = doc.data()["activities"] || [];
+                        portfolio = [...activities];
+                    } else {
+                        console.log("No such document!");
+                    }
+                });
             }
         });
 
@@ -71,10 +88,45 @@
             activities: arrayUnion({
                 activity: selected_activity,
                 description: description,
-            })
+            }),
         });
 
+        portfolio = [
+            ...portfolio,
+            {
+                activity: selected_activity,
+                description: description,
+            },
+        ];
+
         close_modal();
+    }
+
+    function get_image_url(activityName: string) {
+        const ec = cache_ecs.data.find((ec) => ec.name === activityName);
+        return ec ? ec.image : "path/to/placeholder.jpg";
+    }
+
+    async function get_recommendations() {
+        show_indicator = true;
+        modal_message = "Getting Recommendations...";
+
+        let url = "https://pydev19.pythonanywhere.com/recommend?user_id=" + user?.uid;
+        console.log("URL:", url);
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                recommendation = data;
+                show_indicator = false;
+                modal_message = "";
+                show_recommendation = true;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                show_indicator = false;
+                modal_message = "";
+            });
     }
 </script>
 
@@ -139,17 +191,81 @@
     </div>
 {/if}
 
-<div class="mt-5 flex flex-row items-start w-[90%] mx-auto p-5 rounded-lg">
-    <div class="flex flex-col items-center bg-white shadow-lg p-5 rounded-lg">
-        <img
-            src={user?.photoURL || "blank-profile.png"}
-            alt="Profile"
-            class="w-40 h-40 object-cover rounded-lg mb-4 shadow-md"
-        />
-        <h2 class="text-2xl font-bold text-gray-800 mb-2">{user?.displayName}</h2>
-        <p class="text-lg text-gray-600">{first_name} {middle_name} {last_name}</p>
+{#if show_recommendation}
+<div class="fixed z-10 inset-0 overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-50"></div>
+        <div class="bg-gray-600 p-8 rounded shadow-lg max-w-md w-full z-50">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex flex-col">
+                    <h2 class="text-lg font-semibold text-white">Recommendations</h2>
+                    <h3 class="text-md text-gray-500">Here are some activities you can add to your portfolio</h3>
+                </div>
+                <button class="text-white hover:text-gray-700" on:click={() => (show_recommendation = false)}>
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"
+                        ></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="flex flex-col space-y-5">
+                {#each recommendation as activity}
+                    <a href={activity.website}>
+                        <div class="bg-white rounded-lg p-2 flex flex-row justify-between items-center rec-item">
+                            <div class="flex flex-col">
+                                <h3 class="text-lg font-semibold text-gray-800">{activity.name}</h3>
+                            </div>
+                            <img src={activity.image} alt={activity.name} class="w-20" />
+                        </div>
+                    </a>
+                {/each}
+            </div>
+        </div>
     </div>
-    <div class="flex flex-col flex-grow justify-center ml-8 text-xl">
+</div>
+{/if}
+
+<BusyIndicator show={show_indicator} message={modal_message} />
+
+<div class="mt-5 flex flex-row items-start w-[90%] mx-auto p-5 rounded-lg">
+    <div class="flex flex-col space-y-5">
+        <div class="flex flex-col items-center bg-white shadow-lg p-5 rounded-lg">
+            <img
+                src={user?.photoURL || "blank-profile.png"}
+                alt="Profile"
+                class="w-40 h-40 object-cover rounded-lg mb-4 shadow-md"
+            />
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                {user?.displayName}
+            </h2>
+            <p class="text-lg text-gray-600">
+                {first_name}
+                {middle_name}
+                {last_name}
+            </p>
+        </div>
+        <button class='bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600' on:click={() => {
+            get_recommendations();
+        }}>
+            Get ECs Recommendation
+        </button>
+    </div>
+    
+    <div class="flex flex-col flex-grow justify-center ml-8 text-xl space-y-5">
+        {#each portfolio as activity}
+            <div class="bg-white rounded-lg p-2 flex flex-row justify-between items-center">
+                <div class="flex flex-col">
+                    <h3 class="text-lg font-semibold text-gray-800">{activity.activity}</h3>
+                    <p class="text-gray-600">{activity.description}</p>
+                </div>
+                <img src={get_image_url(activity.activity)} alt={activity.activity} class="w-20" />
+            </div>
+        {/each}
+
         <button
             class="flex items-center bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none w-full"
             on:click={() => (show_modal = true)}
@@ -165,3 +281,10 @@
         </button>
     </div>
 </div>
+
+<style>
+    .rec-item:hover {
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        transform: scale(1.05);
+    }
+</style>
