@@ -96,13 +96,13 @@
                         {/if}
                     {/if}
                     {#if !profile_image}
-                        <a href="/profile"
+                        <button on:click={() => (show_menu = !show_menu)}
                             ><img
                                 src="blank-profile.png"
                                 alt=""
                                 class="rounded-full"
                                 width="40"
-                            /></a
+                            /></button
                         >
                     {/if}
                 {/if}
