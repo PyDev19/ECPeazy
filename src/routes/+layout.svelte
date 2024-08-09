@@ -67,33 +67,6 @@
                                 width="40"
                             />
                         </button>
-                        {#if show_menu}
-                            <div
-                                class="flex flex-col absolute top-16 right-14 bg-white rounded-lg"
-                            >
-                                <a
-                                    href="/portfolio"
-                                    class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-t-lg"
-                                >
-                                    <img src="portfolio.svg" alt="portfolio" />
-                                    <p>Porfolio</p>
-                                </a>
-                                <!-- <a
-                                    href="/settings"
-                                    class="flex flex-row space-x-2 p-4 hover:bg-gray-200"
-                                >
-                                    <img src="gear.svg" alt="settings" />
-                                    <p>Settings</p>
-                                </a> -->
-                                <button
-                                    on:click={logout}
-                                    class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-b-lg"
-                                >
-                                    <img src="logout.svg" alt="logout" />
-                                    <p>Logout</p>
-                                </button>
-                            </div>
-                        {/if}
                     {/if}
                     {#if !profile_image}
                         <button on:click={() => (show_menu = !show_menu)}
@@ -104,6 +77,33 @@
                                 width="40"
                             /></button
                         >
+                    {/if}
+                    {#if show_menu}
+                        <div
+                            class="flex flex-col absolute top-16 right-14 bg-white rounded-lg"
+                        >
+                            <a
+                                href="/portfolio"
+                                class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-t-lg"
+                            >
+                                <img src="portfolio.svg" alt="portfolio" />
+                                <p>Porfolio</p>
+                            </a>
+                            <!-- <a
+                                href="/settings"
+                                class="flex flex-row space-x-2 p-4 hover:bg-gray-200"
+                            >
+                                <img src="gear.svg" alt="settings" />
+                                <p>Settings</p>
+                            </a> -->
+                            <button
+                                on:click={logout}
+                                class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-b-lg"
+                            >
+                                <img src="logout.svg" alt="logout" />
+                                <p>Logout</p>
+                            </button>
+                        </div>
                     {/if}
                 {/if}
                 {#if !show_profile}
