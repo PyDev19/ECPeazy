@@ -11,7 +11,7 @@
     function logout() {
         firebase_auth.signOut();
         show_profile = false;
-        window.location.href = "/login";
+        window.location.reload();
     }
 
     onMount(() => {
@@ -44,20 +44,34 @@
     </div>
     {#if show_profile}
         <div class="inline-flex rounded-full bg-[#FFE8A3] my-auto p-1 mr-5 w-12">
-            <img src={profile_image} alt="Profile Pic" class="rounded-full" width="40" />
+            <button on:click={() => {
+                show_menu = !show_menu;
+            }}>
+                <img src={profile_image} alt="Profile Pic" class="rounded-full" width="40" />
+            </button>
         </div>
+        {#if show_menu}
+            <div class="flex flex-col absolute top-16 right-14 bg-white rounded-lg">
+                <a href="/portfolio" class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-t-lg">
+                    <img src="portfolio.svg" alt="portfolio" class="my-auto" />
+                    <p class="my-auto">Porfolio</p>
+                </a>
+                <button on:click={logout} class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-b-lg">
+                    <img src="logout.svg" alt="logout" class="my-auto" />
+                    <p class="my-auto">Logout</p>
+                </button>
+            </div>
+        {/if}
     {:else}
-        <a href="/login" class="login-button mr-2 flex items-center justify-center w-24 h-10 my-auto">
-            Login
-        </a>
+        <a href="/login" class="login-button mr-2 flex items-center justify-center w-24 h-10 my-auto"> Login </a>
     {/if}
 </div>
 
 <style>
     .login-button {
-        background-color: #3B82F6;
+        background-color: #3b82f6;
         color: white;
-        
+
         padding-left: 1rem;
         padding-right: 1rem;
 
@@ -69,6 +83,6 @@
     }
 
     .login-button:hover {
-        background-color: #2563EB;
+        background-color: #2563eb;
     }
 </style>
