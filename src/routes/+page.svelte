@@ -5,7 +5,7 @@
     export let data: PageData;
 </script>
 
-<div class="w-full h-full bg-[#FFFCF1]">
+<div class="w-full min-h-screen bg-[#FFFCF1]">
     <NavBar></NavBar>
 
     <div class="h-screen flex justify-center items-center">
