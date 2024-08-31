@@ -1,145 +1,82 @@
 <script lang="ts">
-    import { type LoginUser } from "$lib/types/user";
-    import BusyIndicator from "$lib/components/BusyIndicator.svelte";
-    import { login } from "$lib/firebase/login";
-    import { is_auth_error } from "$lib/type_checks";
-    import { onMount } from "svelte";
-    import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
-    import { firebase_auth } from "$lib/firebase/firebase_app";
-    import { type CredentialResponse } from "$lib/types/credentials";
+    import './style.css';
+    let animation_active = false;
 
-    let user: LoginUser = {
-        credential: "",
-        password: "",
-    };
-
-    let show_error = false;
-    let show_modal = false;
-
-    let message = "";
-    let modal_message = "Logging in...";
-
-    const email_regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    function activate_login() {
-        if (!user.credential || !user.password) {
-            show_error = true;
-            message = "Please fill in all fields.";
-            return;
-        } else if (!email_regex.test(user.credential)) {
-            show_error = true;
-            message = "Please enter a valid e-mail address.";
-            return;
-        }
-
-        show_modal = true;
-        show_error = false;
-        message = "";
-
-        login(user.credential, user.password)
-            .then((result) => {
-                if (is_auth_error(result)) {
-                    show_error = true;
-                    message = result.message;
-                    show_modal = false;
-
-                    return;
-                } else {
-                    show_modal = false;
-                    window.location.href = "/";
-                }
-            })
-            .catch((error) => {
-                console.log("Unknow error occured");
-            });
+    function toggle_animation() {
+        animation_active = !animation_active;
     }
-
-    function handle_google_auth(response: CredentialResponse) {
-        const credential = GoogleAuthProvider.credential(response.credential);
-
-        signInWithCredential(firebase_auth, credential)
-            .then((result) => {
-                const user = result.user;
-                firebase_auth.updateCurrentUser(user).then(() => {
-                    window.location.href = "/home";
-                });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-
-    onMount(() => {
-        (<any>window).google.accounts.id.initialize({
-            client_id: "162926619471-rdurosn21b96ur002q4vqqmd8uuauqvd",
-            callback: handle_google_auth,
-        });
-        (<any>window).google.accounts.id.renderButton(
-            document.getElementById("google_button"),
-            {
-                theme: "outline",
-                size: "large",
-                text: "sign_up",
-                shape: "pill",
-                logo_alignment: "left",
-                width: 200,
-                height: 100,
-                longtitle: true,
-                use_fedcm_for_prompt: false,
-            },
-        );
-        (<any>window).google.accounts.id.prompt();
-    });
 </script>
 
 <svelte:head>
-    <title>Login</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <title>ECPeazy Login</title>
 </svelte:head>
 
-<BusyIndicator show={show_modal} message={modal_message} />
+<main class="bg-[#FFFCF1] flex items-center justify-center flex-col h-screen">
+    <div class="container bg-[#FFE8A3] rounded-3xl shadow-lg relative overflow-hidden w-[768px] max-w-full min-h-[480px]" class:active={animation_active}>
+        <div class="form-container sign-up absolute top-0 left-0 h-full w-1/2 opacity-0 z-10 {animation_active ? 'animate-move' : ''}">
+            <form class="bg-[#FFE8A3] flex items-center justify-center flex-col px-10 h-full">
+                <h1 class="text-[#5A655E] text-2xl font-bold mb-4">Create Account</h1>
+                <div class="social-icons flex my-5">
+                    <button class="icon-button">
+                        <i class="bx bxl-google"></i>
+                    </button>
+                    <button class="icon-button">
+                        <i class="bx bxl-facebook"></i>
+                    </button>
+                    <button class="icon-button">
+                        <i class="bx bxl-github"></i>
+                    </button>
+                    <button class="icon-button">
+                        <i class="bx bxl-linkedin"></i>
+                    </button>
+                </div>
+                <span class="text-sm mb-4">Register with E-mail</span>
+                <input type="text" placeholder="Name" class="bg-white border-none my-2 px-4 py-2 text-sm rounded-md w-full outline-none" />
+                <input type="email" placeholder="Enter E-mail" class="bg-white border-none my-2 px-4 py-2 text-sm rounded-md w-full outline-none" />
+                <input type="password" placeholder="Enter Password" class="bg-white border-none my-2 px-4 py-2 text-sm rounded-md w-full outline-none" />
+                <button class="bg-[#0D99FF] text-white text-sm px-8 py-2 border border-transparent rounded-md font-semibold tracking-wider mt-2 uppercase">Sign Up</button>
+            </form>
+        </div>
 
-<section class="h-full flex flex-col justify-center items-center font-sans">
-    <div class="opacity-bg p-5 rounded-lg text-center sm:w-[90%] md:w-[70%]">
-        <h1 class="text-[3em] text-[#FFEB3B] m-0">Log In</h1>
+        <div class="form-container sign-in absolute top-0 left-0 h-full w-1/2 z-20">
+            <form class="bg-[#FFE8A3] flex items-center justify-center flex-col px-10 h-full">
+                <h1 class="text-[#5A655E] text-2xl font-bold mb-4">Sign In</h1>
+                <div class="social-icons flex my-5">
+                    <button class="icon-button">
+                        <i class="bx bxl-google"></i>
+                    </button>
+                    <button class="icon-button">
+                        <i class="bx bxl-facebook"></i>
+                    </button>
+                    <button class="icon-button">
+                        <i class="bx bxl-github"></i>
+                    </button>
+                    <button class="icon-button">
+                        <i class="bx bxl-linkedin"></i>
+                    </button>
+                </div>
+                <span class="text-sm mb-4">Login With Email & Password</span>
+                <input type="email" placeholder="Enter E-mail" class="bg-white border-none my-2 px-4 py-2 text-sm rounded-md w-full outline-none" />
+                <input type="password" placeholder="Enter Password" class="bg-white border-none my-2 px-4 py-2 text-sm rounded-md w-full outline-none" />
+                <button class="text-[#5A655E] text-sm my-4">Forget Password?</button>
+                <button class="bg-[#0D99FF] text-white text-sm px-8 py-2 border border-transparent rounded-md font-semibold tracking-wider mt-2 uppercase">Sign In</button>
+            </form>
+        </div>
 
-        <form class="flex flex-col space-y-2 justify-center rounded-lg">
-            <input
-                bind:value={user.credential}
-                placeholder="E-mail"
-                class="p-2 rounded-lg signup-input"
-                autocomplete="email"
-                type="email"
-            />
-            <input
-                bind:value={user.password}
-                placeholder="Password"
-                class="p-2 rounded-lg signup-input"
-                autocomplete="current-password"
-                type="password"
-            />
-            {#if show_error}
-                <p class="text-red-500">{message}</p>
-            {/if}
-            <button
-                type="button"
-                class="p-2 rounded-lg bg-blue-500 text-white justify-center items-center max-w-[50%] mx-auto"
-                on:click={activate_login}>Log In</button
-            >
-            <div id="google_button" class="mx-auto"></div>
-            <p class="text-gray-500 font-bold">Don't have an account?</p>
-            <a
-                href="/signup"
-                class="p-2 rounded-lg bg-blue-500 text-white max-w-[200px] mx-auto"
-                >Sign Up</a
-            >
-        </form>
+        <div class="toggle-container absolute top-0 left-1/2 w-1/2 h-full overflow-hidden rounded-3xl z-50">
+            <div class="toggle bg-[#5A655E] text-white h-full relative left-[-100%] w-[200%]">
+                <div class="toggle-panel toggle-left absolute w-1/2 h-full flex items-center justify-center flex-col px-8 text-center top-0 translate-x-[-200%]">
+                    <h1 class="text-3xl font-bold mb-4">Welcome To <br />ECPeazy</h1>
+                    <p class="text-sm mb-4">Already have an account?</p>
+                    <button on:click={toggle_animation} class="bg-transparent border border-white text-white px-8 py-2 rounded-md uppercase">Sign In</button>
+                </div>
+                <div class="toggle-panel toggle-right absolute right-0 w-1/2 h-full flex items-center justify-center flex-col px-8 text-center top-0">
+                    <h1 class="text-3xl font-bold mb-4">Welcome to <br/> ECPeazy</h1>
+                    <p class="text-sm mb-4">Don't have an account?</p>
+                    <button on:click={toggle_animation} class="bg-transparent border border-white text-white px-8 py-2 rounded-md uppercase">Sign Up</button>
+                </div>
+            </div>
+        </div>
     </div>
-</section>
-
-<style>
-    .signup-input {
-        border: 1px solid #ccc;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        width: 100%;
-    }
-</style>
+</main>
