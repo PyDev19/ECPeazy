@@ -1,0 +1,79 @@
+@keyframes move {
+    0%, 49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+    50%, 100% {
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+.form-container, .toggle-container {
+    transition: all 0.6s ease-in-out;
+}
+
+.container.active .sign-in {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.container.active .sign-up {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: move 0.6s;
+}
+
+.container.active .toggle-container {
+    transform: translateX(-100%);
+}
+
+.toggle {
+    transition: transform 0.6s ease-in-out;
+}
+
+.container.active .toggle {
+    transform: translateX(50%);
+}
+
+.toggle-panel {
+    transition: transform 0.6s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.container.active .toggle-left {
+    transform: translateX(0);
+}
+
+.container.active .toggle-right {
+    transform: translateX(200%);
+}
+
+.animate-move {
+    animation: move 0.6s;
+}
+
+.icon-button {
+    border: 2px solid #5A655E;
+    background-color: #FFE8A3;
+    color: #5A655E;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    z-index: 10;
+    position: relative;
+}
+
+.icon-button:hover {
+    background-color: #0D99FF;
+    color: #FFFFFF;
+}
+
+.social-icons i {
+    font-size: 1.2rem;
+}
