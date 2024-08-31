@@ -43,7 +43,7 @@
         </div>
     </div>
     {#if show_profile}
-        <div class="inline-flex rounded-full bg-[#FFE8A3] my-auto p-1 mr-5 w-12">
+        <div class="inline-flex rounded-full bg-[#FFE8A3] my-auto p-2 mr-5 w-12">
             <button on:click={() => {
                 show_menu = !show_menu;
             }}>
