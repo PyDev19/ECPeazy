@@ -30,7 +30,12 @@ export function load() {
         },
         {
             'name': 'Sai Sasank Achanta',
-            'role': 'Co-Founder/Web Designer/Media & Marketing',
+            'role': 'Co-Founder/UI/UX Designer/Media & Marketing',
+            'image': 'blank-profile.png'
+        },
+        {
+            'name': 'Yafi Rahman',
+            'role': 'Co-Founder/UI/UX Designer/Media & Marketing',
             'image': 'blank-profile.png'
         }
     ]
