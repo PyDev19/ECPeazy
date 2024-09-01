@@ -16,6 +16,7 @@
 .container.active .sign-in {
     transform: translateX(100%);
     opacity: 0;
+    z-index: -1;
 }
 
 .container.active .sign-up {
