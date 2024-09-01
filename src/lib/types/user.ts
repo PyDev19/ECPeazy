@@ -12,7 +12,7 @@ export type SignUpUser = {
 };
 
 export type LoginUser = {
-    credential: string;
+    email: string;
     password: string;
 }
 
