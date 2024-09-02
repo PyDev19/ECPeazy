@@ -2,6 +2,7 @@
     import { firebase_firestore } from "$lib/firebase/firebase.app";
     import type { EC } from "$lib/types/database";
     import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+    import { createEventDispatcher } from "svelte";
 
     export let is_open = false;
     let show_spinner = false;
@@ -15,6 +16,8 @@
     let custom_activity = "";
     let description = "";
     let grade = "";
+
+    const dispatch_event = createEventDispatcher();
 
     function add_activity() {
         show_spinner = true;
@@ -31,22 +34,22 @@
                 grade: grade,
                 image: activity_image,
             }),
-        }).then(() => {
-            dispatchEvent(new CustomEvent("activity_added", {
-                detail: {
+        })
+            .then(() => {
+                dispatch_event("activity_added", {
                     activity: selected_activity,
                     description: description,
                     grade: grade,
                     image: activity_image,
-                },
-            }));
-            show_spinner = false;
-            is_open = false;
-        }).catch((error) => {
-            show_spinner = false;
-            show_error = true;
-            error_message = error.message;
-        });
+                });
+                show_spinner = false;
+                is_open = false;
+            })
+            .catch((error) => {
+                show_spinner = false;
+                show_error = true;
+                error_message = error.message;
+            });
     }
 </script>
 
@@ -72,7 +75,9 @@
             <div
                 class="modal-content bg-[#FFE8A3] rounded-lg shadow-lg p-8 w-[500px] max-w-full relative overflow-hidden"
             >
-                <button class="absolute top-2 right-2 text-[#5A655E] text-xl" on:click={() => is_open = false}> &CircleTimes; </button>
+                <button class="absolute top-2 right-2 text-[#5A655E] text-xl" on:click={() => (is_open = false)}>
+                    &CircleTimes;
+                </button>
                 <div class="flex flex-col justify-center items-center space-y-2 mb-4">
                     <h2 class="text-[#5A655E] text-2xl font-bold justify-center items-center">
                         Add an Activity to Your Portfolio!
@@ -89,9 +94,7 @@
                             name="activity"
                             bind:value={activity}
                         >
-                            <option value="" disabled selected>
-                                Select an activity
-                            </option>
+                            <option value="" disabled selected> Select an activity </option>
                             <option value="custom">Custom</option>
                             {#each activites.data as act}
                                 <option value={act.name}>{act.name}</option>
@@ -116,9 +119,7 @@
                             name="grade"
                             bind:value={grade}
                         >
-                            <option value="" disabled selected>
-                                Which grade did you do the activity in
-                            </option>
+                            <option value="" disabled selected> Which grade did you do the activity in </option>
                             <option value="9th Grade">9th Grade</option>
                             <option value="10th Grade">10th Grade</option>
                             <option value="11th Grade">11th Grade</option>
@@ -129,10 +130,7 @@
                                 <p class="text-red-500 text-sm">{error_message}</p>
                             {/if}
                         </div>
-                        <button
-                            class="bg-[#5A655E] text-white rounded-md px-4 py-2"
-                            on:click={add_activity}
-                        >
+                        <button class="bg-[#5A655E] text-white rounded-md px-4 py-2" on:click={add_activity}>
                             Add Activity
                         </button>
                     </form>

@@ -28,7 +28,8 @@
     });
 
     function activity_added(event: CustomEvent) {
-        activities = [...activities, event.detail];
+        activities.push(event.detail);
+        activities = activities;
     }
 </script>
 
@@ -36,7 +37,12 @@
     <title>Your Portfolio</title>
 </svelte:head>
 
-<PortfolioModal is_open={modal_open} activites={cache_ecs} uid={user?.uid} on:activity_added={activity_added} />
+<PortfolioModal 
+    bind:is_open={modal_open}
+    activites={cache_ecs}
+    uid={user?.uid}
+    on:activity_added={activity_added}
+/>
 
 <main class="w-full min-h-screen bg-[#FFFCF1]">
     <NavBar />
@@ -67,9 +73,11 @@
                 <div class="bg-[#FFE8A3] p-4 rounded-lg shadow-xl w-full hover-effect">
                     <h1 class="text-xl font-bold text-center">Second major:<br />{user_data.major_2}</h1>
                 </div>
-                <button class="bg-[#0D99FF] cursor-pointer p-4 rounded-lg shadow-xl w-full mt-4 hover-effect">
-                    <h1 class="text-xl font-bold text-center text-white">Get Recommendations</h1>
-                </button>
+                {#if activities.length > 0}
+                    <button class="bg-[#0D99FF] cursor-pointer p-4 rounded-lg shadow-xl w-full mt-4 hover-effect">
+                        <h1 class="text-xl font-bold text-center text-white">Get Recommendations</h1>
+                    </button>
+                {/if}
             </div>
         </div>
         <div class="col-span-3 flex flex-col items-center">
@@ -79,17 +87,38 @@
                         <div class="bg-[#FFE8A3] p-4 rounded-lg shadow-xl w-full">
                             <h1 class="text-xl font-bold text-center">No activities found</h1>
                         </div>
-                        <button class="bg-[#0D99FF] cursor-pointer p-4 rounded-lg shadow-xl w-full hover-effect" on:click={() => modal_open = true}>
+                        <button
+                            class="bg-[#0D99FF] cursor-pointer p-4 rounded-lg shadow-xl w-full hover-effect"
+                            on:click={() => (modal_open = true)}
+                        >
                             <h1 class="text-xl font-bold text-center text-white">Add Activity</h1>
                         </button>
                     </div>
                 {:else}
-                    {#each activities as activity}
-                        <div class="bg-[#FFE8A3] p-4 rounded-lg shadow-xl w-full hover-effect col-span-3">
-                            <h1 class="text-xl font-bold text-center">{activity.activity}</h1>
-                            <h2 class="text-lg font-bold text-center">{activity.description}</h2>
+                    <div class="col-span-3 flex flex-col gap-4 w-full">
+                        <div class="overflow-y-auto space-y-2 max-h-[500px]">
+                            {#each activities as activity, index (index)}
+                                <div
+                                    class="p-5 bg-[#E6E6E6] text-left rounded-lg flex flex-row space-x-3 hover-effect mx-7"
+                                >
+                                    <img src={activity.image} alt="{activity.activity} image" class="w-40 my-auto" />
+                                    <div class="flex flex-col space-y-3 my-auto">
+                                        <h2 class="text-4xl">{activity.activity}</h2>
+                                        <p class="text-lg">
+                                            {activity.description}
+                                        </p>
+                                    </div>
+                                </div>
+                            {/each}
                         </div>
-                    {/each}
+
+                        <button
+                            class="bg-[#0D99FF] cursor-pointer p-4 rounded-lg shadow-xl w-full hover-effect"
+                            on:click={() => (modal_open = true)}
+                        >
+                            <h1 class="text-xl font-bold text-center text-white">Add Activity</h1>
+                        </button>
+                    </div>
                 {/if}
             </div>
         </div>
