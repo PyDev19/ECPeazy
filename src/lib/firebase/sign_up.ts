@@ -1,4 +1,4 @@
-import { firebase_auth, firebase_firestore } from '$lib/firebase/firebase_app';
+import { firebase_auth, firebase_firestore } from '$lib/firebase/firebase.app';
 import { createUserWithEmailAndPassword, updateProfile, type AuthError, type User } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import type { GoogleUser, SignUpUser } from '$lib/types/user';

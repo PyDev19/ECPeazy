@@ -1,6 +1,6 @@
 import type { EC } from "$lib/types/database";
 import { FirestoreError, collection, getDocs } from "firebase/firestore";
-import { firebase_firestore } from "./firebase_app";
+import { firebase_firestore } from "./firebase.app";
 
 export async function get_all_ecs() {
     const ecs_collection = collection(firebase_firestore, "ECs");
