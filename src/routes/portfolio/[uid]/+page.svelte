@@ -12,6 +12,8 @@
 
     let cache_ecs = { data: [] };
 
+    let modal_open = false;
+
     onMount(() => {
         let cache_ecs_string = localStorage.getItem("ECs");
         if (cache_ecs_string) {
@@ -24,13 +26,17 @@
             });
         }
     });
+
+    function activity_added(event: CustomEvent) {
+        activities = [...activities, event.detail];
+    }
 </script>
 
 <svelte:head>
     <title>Your Portfolio</title>
 </svelte:head>
 
-<PortfolioModal is_open={true} show_spinner={false} activites={cache_ecs} uid={user?.uid} />
+<PortfolioModal is_open={modal_open} activites={cache_ecs} uid={user?.uid} on:activity_added={activity_added} />
 
 <main class="w-full min-h-screen bg-[#FFFCF1]">
     <NavBar />
@@ -73,7 +79,7 @@
                         <div class="bg-[#FFE8A3] p-4 rounded-lg shadow-xl w-full">
                             <h1 class="text-xl font-bold text-center">No activities found</h1>
                         </div>
-                        <button class="bg-[#0D99FF] cursor-pointer p-4 rounded-lg shadow-xl w-full hover-effect">
+                        <button class="bg-[#0D99FF] cursor-pointer p-4 rounded-lg shadow-xl w-full hover-effect" on:click={() => modal_open = true}>
                             <h1 class="text-xl font-bold text-center text-white">Add Activity</h1>
                         </button>
                     </div>

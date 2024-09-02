@@ -1,8 +1,14 @@
 <script>
+    import { firebase_firestore } from "$lib/firebase/firebase.app";
+    import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+
     export let is_open = false;
-    export let show_spinner = false;
+    let show_spinner = false;
     export let activites;
-    export let uid;
+    export let uid = "";
+
+    let show_error = false;
+    let error_message = "";
 
     let activity = "";
     let custom_activity = "";
@@ -10,7 +16,33 @@
     let grade = "";
 
     function add_activity() {
-        
+        show_spinner = true;
+        show_error = false;
+
+        let selected_activity = activity === "custom" ? custom_activity : activity;
+        const portfolio_doc = doc(firebase_firestore, "Portfolios", uid);
+
+        updateDoc(portfolio_doc, {
+            activities: arrayUnion({
+                activity: selected_activity,
+                description: description,
+                grade: grade,
+            }),
+        }).then(() => {
+            dispatchEvent(new CustomEvent("activity_added", {
+                detail: {
+                    activity: selected_activity,
+                    description: description,
+                    grade: grade,
+                },
+            }));
+            show_spinner = false;
+            is_open = false;
+        }).catch((error) => {
+            show_spinner = false;
+            show_error = true;
+            error_message = error.message;
+        });
     }
 </script>
 
@@ -28,15 +60,15 @@
                             class="w-24 h-24 border-4 border-transparent text-red-400 text-2xl animate-spin flex items-center justify-center border-t-red-400 rounded-full"
                         ></div>
                     </div>
-                    <h1 class="text-2xl font-bold text-[#5A655E]">Signing you up...</h1>
-                    <p class="text-[#5A655E]">Please wait until we complete your sign up process</p>
+                    <h1 class="text-2xl font-bold text-[#5A655E]">Adding activity to your portfolio...</h1>
+                    <p class="text-[#5A655E]">Please wait until we add the activity to your portfolio!</p>
                 </div>
             </div>
         {:else}
             <div
                 class="modal-content bg-[#FFE8A3] rounded-lg shadow-lg p-8 w-[500px] max-w-full relative overflow-hidden"
             >
-                <button class="absolute top-2 right-2 text-[#5A655E] text-xl" on:click={close}> &CircleTimes; </button>
+                <button class="absolute top-2 right-2 text-[#5A655E] text-xl" on:click={() => is_open = false}> &CircleTimes; </button>
                 <div class="flex flex-col justify-center items-center space-y-2 mb-4">
                     <h2 class="text-[#5A655E] text-2xl font-bold justify-center items-center">
                         Add an Activity to Your Portfolio!
@@ -88,6 +120,17 @@
                             <option value="11th Grade">11th Grade</option>
                             <option value="12th Grade">12th Grade</option>
                         </select>
+                        <div class="flex justify-center items-center">
+                            {#if show_error}
+                                <p class="text-red-500 text-sm">{error_message}</p>
+                            {/if}
+                        </div>
+                        <button
+                            class="bg-[#5A655E] text-white rounded-md px-4 py-2"
+                            on:click={add_activity}
+                        >
+                            Add Activity
+                        </button>
                     </form>
                 </div>
             </div>
