@@ -57,6 +57,18 @@
             .catch((error) => {
                 console.log(error);
             });
+        
+        const portfolio_doc_ref = doc(firebase_firestore, "Portfolios", current_user!.uid);
+        setDoc(portfolio_doc_ref, {
+            activities: [],
+        }).then(() => {
+            console.log("Portfolio document created successfully");
+        }).catch((error) => {
+            console.log(error);
+            show_spinner = false;
+            show_error = true;
+            error_message = error.message;
+        });
 
         const user_doc_ref = doc(firebase_firestore, "Users", current_user!.uid);
         setDoc(user_doc_ref, {
@@ -70,18 +82,16 @@
             major_1: sign_up_user.major_1,
             major_2: sign_up_user.major_2,
             email: email,
-        })
-            .then(() => {
-                console.log("User document created successfully");
-                show_spinner = false;
-                goto("/portfolio/" + current_user!.uid);
-            })
-            .catch((error) => {
-                console.log(error);
-                show_spinner = false;
-                show_error = true;
-                error_message = error.message;
-            });
+        }).then(() => {
+            console.log("User document created successfully");
+            show_spinner = false;
+            goto("/portfolio/" + current_user!.uid);
+        }).catch((error) => {
+            console.log(error);
+            show_spinner = false;
+            show_error = true;
+            error_message = error.message;
+        });
     }
 
     function next() {

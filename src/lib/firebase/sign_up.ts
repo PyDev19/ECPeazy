@@ -31,6 +31,11 @@ export async function sign_up(user: SignUpUser): Promise<User | AuthError> {
             major_2: user.major_2,
         });
 
+        const portfolio_doc_ref = doc(firebase_firestore, 'Portfolios', current_user.uid);
+        await setDoc(portfolio_doc_ref, {
+            activites: [],
+        });
+
         return user_credential.user;
     }).catch((error: AuthError) => {
         console.log(error.code, error.message);
