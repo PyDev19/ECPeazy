@@ -53,28 +53,3 @@
 .animate-move {
     animation: move 0.6s;
 }
-
-.icon-button {
-    border: 2px solid #5A655E;
-    background-color: #FFE8A3;
-    color: #5A655E;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    margin: 0 5px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    z-index: 10;
-    position: relative;
-}
-
-.icon-button:hover {
-    background-color: #0D99FF;
-    color: #FFFFFF;
-}
-
-.social-icons i {
-    font-size: 1.2rem;
-}
