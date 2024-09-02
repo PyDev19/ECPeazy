@@ -3,7 +3,7 @@
     import type { SignUpUser } from "$lib/types/user";
     import { goto } from "$app/navigation";
     import { updateProfile } from "firebase/auth";
-    import { firebase_auth, firebase_firestore } from "$lib/firebase/firebase_app";
+    import { firebase_auth, firebase_firestore } from "$lib/firebase/firebase.app";
     import { doc, setDoc } from "firebase/firestore";
 
     export let is_open: boolean;
@@ -74,7 +74,7 @@
             .then(() => {
                 console.log("User document created successfully");
                 show_spinner = false;
-                goto("/portfolio");
+                goto("/portfolio/" + current_user!.uid);
             })
             .catch((error) => {
                 console.log(error);
