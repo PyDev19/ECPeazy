@@ -18,7 +18,7 @@
 
     let show_error = false;
     let error_message = "";
-
+    
     let sign_up_user: SignUpUser = {
         grade: "",
         email: email,

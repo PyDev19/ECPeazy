@@ -21,7 +21,8 @@ export const load: PageServerLoad = async ({ params }) => {
             status: 200,
             user: structuredClone(user),
             activities,
-            user_data
+            user_data,
+            uid
         };
     } catch (_error) {
         error(404, {

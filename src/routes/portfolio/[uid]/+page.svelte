@@ -9,10 +9,14 @@
     let user = data.user;
     let user_data = data.user_data!;
     let activities = data.activities;
+    let uid = data.uid;
 
     let cache_ecs = { data: [] };
 
     let modal_open = false;
+    let recommendation_modal_open = false;
+
+    const recommendation_url = "https://pydev19.pythonanywhere.com/recommend?user_id=" + uid;
 
     onMount(() => {
         let cache_ecs_string = localStorage.getItem("ECs");
@@ -30,6 +34,10 @@
     function activity_added(event: CustomEvent) {
         activities.push(event.detail);
         activities = activities;
+    }
+
+    function get_recommendations() {
+        recommendation_modal_open = true;
     }
 </script>
 
