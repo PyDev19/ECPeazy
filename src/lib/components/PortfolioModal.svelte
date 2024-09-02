@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
     import { firebase_firestore } from "$lib/firebase/firebase.app";
+    import type { EC } from "$lib/types/database";
     import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 
     export let is_open = false;
     let show_spinner = false;
-    export let activites;
+    export let activites: { data: EC[] } = { data: [] };
     export let uid = "";
 
     let show_error = false;
@@ -19,7 +20,8 @@
         show_spinner = true;
         show_error = false;
 
-        let selected_activity = activity === "custom" ? custom_activity : activity;
+        const selected_activity = activity === "custom" ? custom_activity : activity;
+        const activity_image = activites.data.find((act) => act.name === selected_activity)?.image;
         const portfolio_doc = doc(firebase_firestore, "Portfolios", uid);
 
         updateDoc(portfolio_doc, {
@@ -27,6 +29,7 @@
                 activity: selected_activity,
                 description: description,
                 grade: grade,
+                image: activity_image,
             }),
         }).then(() => {
             dispatchEvent(new CustomEvent("activity_added", {
@@ -34,6 +37,7 @@
                     activity: selected_activity,
                     description: description,
                     grade: grade,
+                    image: activity_image,
                 },
             }));
             show_spinner = false;

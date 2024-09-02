@@ -13,4 +13,4 @@ export type EC = {
     categories: string
 }
 
-export type Activity = { activity: string, description: string, grade: string }
+export type Activity = { activity: string, description: string, grade: string, image: string }
