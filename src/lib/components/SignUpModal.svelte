@@ -67,7 +67,7 @@
                 show_error = true;
                 error_message = result.message;
             } else {
-                goto("/portfolio");
+                goto("/portfolio/" + result.uid);
             }
         });
     }
