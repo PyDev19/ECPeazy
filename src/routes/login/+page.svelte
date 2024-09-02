@@ -10,7 +10,7 @@
     import { onMount } from "svelte";
     import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
     import type { CredentialResponse } from "$lib/types/credentials";
-    import { firebase_auth } from "$lib/firebase/firebase_app";
+    import { firebase_auth } from "$lib/firebase/firebase.app";
 
     let animation_active = false;
     let show_sign_in_error = false;
@@ -78,7 +78,7 @@
                 return;
             } else {
                 show_spinner = false;
-                goto("/");
+                goto("/portfolio/" + response.uid);
             }
         });
     }
@@ -104,7 +104,7 @@
                 .then((result) => {
                     const user = result.user;
                     firebase_auth.updateCurrentUser(user).then(() => {
-                        window.location.href = "/";
+                        goto("/portfolio/" + user.uid);
                     });
                 })
                 .catch((error) => {
