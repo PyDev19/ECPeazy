@@ -1,8 +1,10 @@
 <script lang="ts">
-    import type { LoginUser, SignUpUser } from "$lib/types/user";
+    import type { LoginUser } from "$lib/types/user";
     import { login } from "$lib/firebase/login";
     import { is_auth_error } from "$lib/type_checks";
     import { goto } from "$app/navigation";
+    import SignUpModal from "$lib/components/SignUpModal.svelte";
+    import GoogleSignUpModal from "$lib/components/GoogleSignUpModal.svelte";
 
     import "./style.css";
     import { onMount } from "svelte";
@@ -14,6 +16,9 @@
     let show_sign_in_error = false;
     let show_sign_up_error = false;
     let show_spinner = false;
+    let show_sign_up_modal = false;
+    let show_google_sign_up_modal = false;
+    let is_signing_up = false;
 
     let sign_in_error_message = "";
     let sign_up_error_message = "";
@@ -27,21 +32,16 @@
         password: "",
     };
 
-    let sign_up_user: SignUpUser = {
-        age: "",
+    let sign_up_user = {
         email: "",
         first_name: "",
         last_name: "",
         middle_name: "",
-        password: "",
-        school: "",
-        graduation_year: "",
-        confirm_password: "",
-        username: "",
     };
 
     function toggle_animation() {
         animation_active = !animation_active;
+        is_signing_up = !is_signing_up;
     }
 
     function hande_login() {
@@ -83,27 +83,65 @@
         });
     }
 
-    function handle_google_login(response: CredentialResponse) {
+    function handle_google_auth(response: CredentialResponse) {
         const credential = GoogleAuthProvider.credential(response.credential);
+        if (is_signing_up) {
+            signInWithCredential(firebase_auth, credential)
+                .then((result) => {
+                    const user = result.user;
 
-        signInWithCredential(firebase_auth, credential)
-            .then((result) => {
-                const user = result.user;
-                firebase_auth.updateCurrentUser(user).then(() => {
-                    window.location.href = "/";
+                    sign_up_user.email = user.email!;
+                    sign_up_user.first_name = user.displayName!.split(" ")[0];
+                    sign_up_user.last_name = user.displayName!.split(" ")[1];
+                    show_google_sign_up_modal = true;
+                })
+                .catch((error) => {
+                    show_sign_up_error = true;
+                    sign_up_error_message = error.message;
                 });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        } else {
+            signInWithCredential(firebase_auth, credential)
+                .then((result) => {
+                    const user = result.user;
+                    firebase_auth.updateCurrentUser(user).then(() => {
+                        window.location.href = "/";
+                    });
+                })
+                .catch((error) => {
+                    show_sign_in_error = true;
+                    sign_in_error_message = error.message;
+                });
+        }
+    }
+
+    function open_sign_up_modal() {
+        show_sign_up_error = false;
+        if (!sign_up_user.first_name || !sign_up_user.last_name || !sign_up_user.email) {
+            show_sign_up_error = true;
+            sign_up_error_message = "Please fill in all fields.";
+            return;
+        }
+
+        show_sign_up_modal = true;
     }
 
     onMount(() => {
         (<any>window).google.accounts.id.initialize({
             client_id: "162926619471-rdurosn21b96ur002q4vqqmd8uuauqvd",
-            callback: handle_google_login,
+            callback: handle_google_auth,
         });
-        (<any>window).google.accounts.id.renderButton(document.getElementById("google_button"), {
+        (<any>window).google.accounts.id.renderButton(document.getElementById("google_login_button"), {
+            theme: "outline",
+            size: "large",
+            text: "sign_up",
+            shape: "pill",
+            logo_alignment: "left",
+            width: 200,
+            height: 100,
+            longtitle: true,
+            use_fedcm_for_prompt: false,
+        });
+        (<any>window).google.accounts.id.renderButton(document.getElementById("google_signup_button"), {
             theme: "outline",
             size: "large",
             text: "sign_up",
@@ -122,6 +160,24 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <title>ECPeazy Login</title>
 </svelte:head>
+
+<SignUpModal
+    is_open={show_sign_up_modal}
+    on_close={() => (show_sign_up_modal = false)}
+    first_name={sign_up_user.first_name}
+    middle_name={sign_up_user.middle_name}
+    last_name={sign_up_user.last_name}
+    email={sign_up_user.email}
+/>
+
+<GoogleSignUpModal 
+    is_open={show_google_sign_up_modal}
+    on_close={() => (show_google_sign_up_modal = false)}
+    first_name={sign_up_user.first_name}
+    middle_name={sign_up_user.middle_name}
+    last_name={sign_up_user.last_name}
+    email={sign_up_user.email}
+/>
 
 <main class="bg-[#FFFCF1] flex items-center justify-center flex-col h-screen">
     {#if show_spinner}
@@ -147,32 +203,43 @@
                     : ''}"
             >
                 <form class="bg-[#FFE8A3] flex items-center justify-center flex-col px-10 h-full">
-                    <div class="flex items-center justify-center flex-col">
-                        <h1 class="text-[#5A655E] text-2xl font-bold mb-4">Create Account</h1>
-                        <span class="text-sm mb-4">Register with E-mail</span>
-                        <input
-                            type="text"
-                            placeholder="Name"
-                            class="bg-white border-none my-2 px-4 py-2 text-sm rounded-md w-full outline-none"
-                        />
-                        <input
-                            type="email"
-                            placeholder="Enter E-mail"
-                            class="bg-white border-none my-2 px-4 py-2 text-sm rounded-md w-full outline-none"
-                        />
-                        <input
-                            type="password"
-                            placeholder="Enter Password"
-                            class="bg-white border-none my-2 px-4 py-2 text-sm rounded-md w-full outline-none"
-                        />
-                        {#if show_sign_up_error}
-                            <p class="text-red-500 text-sm my-2">{sign_up_error_message}</p>
-                        {/if}
-                        <button
-                            class="bg-[#0D99FF] text-white text-sm px-8 py-2 border border-transparent rounded-md font-semibold tracking-wider mt-2 uppercase"
-                            >Next</button
-                        >
-                    </div>
+                    <h1 class="text-[#5A655E] text-2xl font-bold mb-4">Create Account</h1>
+                    <span class="text-sm mb-4">Register with E-mail</span>
+                    <input
+                        type="text"
+                        placeholder="First Name"
+                        class="bg-white border-none my-2 px-4 py-2 text-sm rounded-md w-full outline-none"
+                        bind:value={sign_up_user.first_name}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Middle Name"
+                        class="bg-white border-none my-2 px-4 py-2 text-sm rounded-md w-full outline-none"
+                        bind:value={sign_up_user.middle_name}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Last Name"
+                        class="bg-white border-none my-2 px-4 py-2 text-sm rounded-md w-full outline-none"
+                        bind:value={sign_up_user.last_name}
+                    />
+                    <input
+                        type="email"
+                        placeholder="Enter E-mail"
+                        class="bg-white border-none my-2 px-4 py-2 text-sm rounded-md w-full outline-none"
+                        bind:value={sign_up_user.email}
+                    />
+                    {#if show_sign_up_error}
+                        <p class="text-red-500 text-sm my-2">{sign_up_error_message}</p>
+                    {/if}
+                    <button
+                        class="bg-[#0D99FF] text-white text-sm px-8 py-2 border border-transparent rounded-md font-semibold tracking-wider mt-2 uppercase"
+                        on:click={open_sign_up_modal}>Sign Up</button
+                    >
+                    <button
+                        id="google_signup_button"
+                        class="text-white text-sm px-8 py-2 border border-transparent rounded-md font-semibold tracking-wider mt-2 uppercase"
+                    ></button>
                 </form>
             </div>
 
@@ -201,14 +268,14 @@
                         on:click={hande_login}>Sign In</button
                     >
                     <button
-                        id="google_button"
+                        id="google_login_button"
                         class="text-white text-sm px-8 py-2 border border-transparent rounded-md font-semibold tracking-wider mt-2 uppercase"
                     >
                     </button>
                 </form>
             </div>
 
-            <div class="toggle-container absolute top-0 left-1/2 w-1/2 h-full overflow-hidden rounded-3xl z-50">
+            <div class="toggle-container absolute top-0 left-1/2 w-1/2 h-full overflow-hidden rounded-3xl z-20">
                 <div class="toggle bg-[#5A655E] text-white h-full relative left-[-100%] w-[200%]">
                     <div
                         class="toggle-panel toggle-left absolute w-1/2 h-full flex items-center justify-center flex-col px-8 text-center top-0 translate-x-[-200%]"
