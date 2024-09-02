@@ -6,7 +6,7 @@
 </script>
 
 <div class="w-full min-h-screen bg-[#FFFCF1]">
-    <NavBar></NavBar>
+    <NavBar />
 
     <div class="h-screen flex justify-center items-center">
         <div class="bg-[#FFE8A3] w-full flex flex-row p-10 space-x-10">
