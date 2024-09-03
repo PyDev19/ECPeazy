@@ -1,3 +1,5 @@
+export let prerender = 'auto';
+
 import { firebase_admin_auth } from "$lib/firebase/firebase.admin";
 import { doc, getDoc } from "firebase/firestore";
 import type { PageServerLoad } from "./$types";
