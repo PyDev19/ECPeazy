@@ -83,36 +83,36 @@
         });
     }
 
-    function handle_google_auth(response: CredentialResponse) {
-        const credential = GoogleAuthProvider.credential(response.credential);
-        if (is_signing_up) {
-            signInWithCredential(firebase_auth, credential)
-                .then((result) => {
-                    const user = result.user;
+    // function handle_google_auth(response: CredentialResponse) {
+    //     const credential = GoogleAuthProvider.credential(response.credential);
+    //     if (is_signing_up) {
+    //         signInWithCredential(firebase_auth, credential)
+    //             .then((result) => {
+    //                 const user = result.user;
 
-                    sign_up_user.email = user.email!;
-                    sign_up_user.first_name = user.displayName!.split(" ")[0];
-                    sign_up_user.last_name = user.displayName!.split(" ")[1];
-                    show_google_sign_up_modal = true;
-                })
-                .catch((error) => {
-                    show_sign_up_error = true;
-                    sign_up_error_message = error.message;
-                });
-        } else {
-            signInWithCredential(firebase_auth, credential)
-                .then((result) => {
-                    const user = result.user;
-                    firebase_auth.updateCurrentUser(user).then(() => {
-                        goto("/portfolio/" + user.uid);
-                    });
-                })
-                .catch((error) => {
-                    show_sign_in_error = true;
-                    sign_in_error_message = error.message;
-                });
-        }
-    }
+    //                 sign_up_user.email = user.email!;
+    //                 sign_up_user.first_name = user.displayName!.split(" ")[0];
+    //                 sign_up_user.last_name = user.displayName!.split(" ")[1];
+    //                 show_google_sign_up_modal = true;
+    //             })
+    //             .catch((error) => {
+    //                 show_sign_up_error = true;
+    //                 sign_up_error_message = error.message;
+    //             });
+    //     } else {
+    //         signInWithCredential(firebase_auth, credential)
+    //             .then((result) => {
+    //                 const user = result.user;
+    //                 firebase_auth.updateCurrentUser(user).then(() => {
+    //                     goto("/portfolio/" + user.uid);
+    //                 });
+    //             })
+    //             .catch((error) => {
+    //                 show_sign_in_error = true;
+    //                 sign_in_error_message = error.message;
+    //             });
+    //     }
+    // }
 
     function open_sign_up_modal() {
         show_sign_up_error = false;
@@ -125,35 +125,35 @@
         show_sign_up_modal = true;
     }
 
-    onMount(() => {
-        (<any>window).google.accounts.id.initialize({
-            client_id: "162926619471-rdurosn21b96ur002q4vqqmd8uuauqvd",
-            callback: handle_google_auth,
-        });
-        (<any>window).google.accounts.id.renderButton(document.getElementById("google_login_button"), {
-            theme: "outline",
-            size: "large",
-            text: "sign_up",
-            shape: "pill",
-            logo_alignment: "left",
-            width: 200,
-            height: 100,
-            longtitle: true,
-            use_fedcm_for_prompt: false,
-        });
-        (<any>window).google.accounts.id.renderButton(document.getElementById("google_signup_button"), {
-            theme: "outline",
-            size: "large",
-            text: "sign_up",
-            shape: "pill",
-            logo_alignment: "left",
-            width: 200,
-            height: 100,
-            longtitle: true,
-            use_fedcm_for_prompt: false,
-        });
-        (<any>window).google.accounts.id.prompt();
-    });
+    // onMount(() => {
+    //     window.google.accounts.id.initialize({
+    //         client_id: "162926619471-rdurosn21b96ur002q4vqqmd8uuauqvd",
+    //         callback: handle_google_auth,
+    //     });
+    //     window.google.accounts.id.renderButton(document.getElementById("google_login_button"), {
+    //         theme: "outline",
+    //         size: "large",
+    //         text: "sign_up",
+    //         shape: "pill",
+    //         logo_alignment: "left",
+    //         width: 200,
+    //         height: 100,
+    //         longtitle: true,
+    //         use_fedcm_for_prompt: false,
+    //     });
+    //     window.google.accounts.id.renderButton(document.getElementById("google_signup_button"), {
+    //         theme: "outline",
+    //         size: "large",
+    //         text: "sign_up",
+    //         shape: "pill",
+    //         logo_alignment: "left",
+    //         width: 200,
+    //         height: 100,
+    //         longtitle: true,
+    //         use_fedcm_for_prompt: false,
+    //     });
+    //     window.google.accounts.id.prompt();
+    // });
 </script>
 
 <svelte:head>

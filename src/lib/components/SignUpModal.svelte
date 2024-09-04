@@ -59,15 +59,17 @@
             show_error = false;
         }
 
+        sign_up_user.email = email;
         show_spinner = true;
         sign_up(sign_up_user).then((result) => {
-            show_spinner = false;
-
+            
             if (is_auth_error(result)) {
+                show_spinner = false;
                 show_error = true;
                 error_message = result.message;
             } else {
                 goto("/portfolio/" + result.uid);
+                show_spinner = false;
             }
         });
     }
