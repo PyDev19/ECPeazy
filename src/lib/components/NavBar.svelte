@@ -3,6 +3,7 @@
     import { firebase_auth } from "$lib/firebase/firebase.app";
     import type { User } from "firebase/auth";
     import { onAuthStateChanged } from "firebase/auth";
+    import { goto } from "$app/navigation";
 
     let show_profile = false;
     let profile_image: string | null = "";
@@ -12,7 +13,7 @@
     function logout() {
         firebase_auth.signOut();
         show_profile = false;
-        window.location.reload();
+        goto("/");
     }
 
     onMount(() => {
@@ -55,24 +56,28 @@
                     show_menu = !show_menu;
                 }}
             >
-                <img src={profile_image} alt="Profile Pic" class="rounded-full" width="40" />
+                {#if profile_image === null}
+                    <img src="/blank-profile.png" alt="Profile Pic" class="rounded-full" width="40" />
+                {:else}
+                    <img src={profile_image} alt="Profile Pic" class="rounded-full" width="40" />
+                {/if}
             </button>
         </div>
         {#if show_menu}
             <div class="flex flex-col absolute top-16 right-14 bg-white rounded-lg">
                 {#if uid === ""}
                     <a href="/login" class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-t-lg">
-                        <img src="portfolio.svg" alt="portfolio" class="my-auto" />
+                        <img src="/portfolio.svg" alt="portfolio" class="my-auto" />
                         <p class="my-auto">Porfolio</p>
                     </a>
                 {:else}
                     <a href="/portfolio/{uid}" class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-t-lg">
-                        <img src="portfolio.svg" alt="portfolio" class="my-auto" />
+                        <img src="/portfolio.svg" alt="portfolio" class="my-auto" />
                         <p class="my-auto">Porfolio</p>
                     </a>
                 {/if}
                 <button on:click={logout} class="flex flex-row space-x-2 p-4 hover:bg-gray-200 rounded-b-lg">
-                    <img src="logout.svg" alt="logout" class="my-auto" />
+                    <img src="/logout.svg" alt="logout" class="my-auto" />
                     <p class="my-auto">Logout</p>
                 </button>
             </div>

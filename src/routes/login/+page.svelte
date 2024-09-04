@@ -77,8 +77,9 @@
 
                 return;
             } else {
-                show_spinner = false;
-                goto("/portfolio/" + response.uid);
+                goto("/portfolio/" + response.uid).then(() => {
+                    show_spinner = false;
+                });
             }
         });
     }

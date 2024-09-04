@@ -21,10 +21,10 @@
     
     let sign_up_user: SignUpUser = {
         grade: "",
-        email: email,
-        first_name: first_name,
-        last_name: last_name,
-        middle_name: middle_name,
+        email,
+        first_name,
+        last_name,
+        middle_name,
         password: "",
         school: "",
         graduation_year: "",
@@ -60,6 +60,10 @@
         }
 
         sign_up_user.email = email;
+        sign_up_user.first_name = first_name;
+        sign_up_user.middle_name = middle_name;
+        sign_up_user.last_name = last_name;
+
         show_spinner = true;
         sign_up(sign_up_user).then((result) => {
             
@@ -68,8 +72,10 @@
                 show_error = true;
                 error_message = result.message;
             } else {
-                goto("/portfolio/" + result.uid);
-                show_spinner = false;
+                goto("/portfolio/" + result.uid).then(() => {
+                    show_spinner = false;
+                    on_close();
+                });
             }
         });
     }

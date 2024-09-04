@@ -39,6 +39,8 @@
     function get_recommendations() {
         recommendation_modal_open = true;
     }
+
+    console.log(user?.photoURL);
 </script>
 
 <svelte:head>
@@ -58,8 +60,8 @@
     <div class="grid grid-cols-4 gap-4 h-screen justify-center items-center mx-5">
         <div class="col-span-1 flex flex-col items-center">
             <div class="bg-white p-4 rounded-full shadow-xl mb-4 flex justify-between hover-effect">
-                {#if user?.photoURL === ""}
-                    <img src="blank-profile.png" alt="Profile Pic" class="rounded-full" width="175" />
+                {#if user?.photoURL === undefined}
+                    <img src="/blank-profile.png" alt="Profile Pic" class="rounded-full" width="175" />
                 {:else}
                     <img src={user?.photoURL} alt="Profile Pic" class="rounded-full" width="175" />
                 {/if}
