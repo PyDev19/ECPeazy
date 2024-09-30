@@ -1,4 +1,4 @@
-import { firebase_auth } from "./firebase_app";
+import { firebase_auth } from "./firebase.app";
 import { signInWithEmailAndPassword, type AuthError, type User } from "firebase/auth";
 
 export async function login(email: string, password: string): Promise<User | AuthError> {

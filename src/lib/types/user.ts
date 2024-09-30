@@ -3,16 +3,18 @@ export type SignUpUser = {
     middle_name: string;
     last_name: string;
     school: string;
-    age: string;
+    grade: string;
     graduation_year: string;
     username: string;
     email: string;
     password: string;
     confirm_password: string;
+    major_1: string;
+    major_2: string;
 };
 
 export type LoginUser = {
-    credential: string;
+    email: string;
     password: string;
 }
 
