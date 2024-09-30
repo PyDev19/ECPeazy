@@ -1,9 +1,13 @@
 <script lang="ts">
     import NavBar from "$lib/components/NavBar.svelte";
     import PortfolioModal from "$lib/components/PortfolioModal.svelte";
+    import Spinner from "$lib/components/Spinner.svelte";
+    import RecommendationModal from "$lib/components/RecommendationModal.svelte";
     import { get_all_ecs } from "$lib/firebase/get_all_ecs";
     import { onMount } from "svelte";
     import type { PageServerData } from "./$types";
+    import { doc, updateDoc } from "firebase/firestore";
+    import { firebase_firestore } from "$lib/firebase/firebase.app";
 
     export let data: PageServerData;
     let user = data.user;
@@ -15,8 +19,7 @@
 
     let modal_open = false;
     let recommendation_modal_open = false;
-
-    const recommendation_url = "https://pydev19.pythonanywhere.com/recommend?user_id=" + uid;
+    let spinner = false;
 
     onMount(() => {
         let cache_ecs_string = localStorage.getItem("ECs");
@@ -40,6 +43,19 @@
         recommendation_modal_open = true;
     }
 
+    function delete_activity(index: number) {
+        spinner = true;
+        activities.splice(index, 1);
+        activities = activities;
+
+        const portfolio_doc = doc(firebase_firestore, "Portfolios", uid);
+        updateDoc(portfolio_doc, {
+            activities: activities,
+        }).then(() => {
+            spinner = false;
+        });
+    }
+
     console.log(user?.photoURL);
 </script>
 
@@ -47,12 +63,9 @@
     <title>Your Portfolio</title>
 </svelte:head>
 
-<PortfolioModal 
-    bind:is_open={modal_open}
-    activites={cache_ecs}
-    uid={user?.uid}
-    on:activity_added={activity_added}
-/>
+<PortfolioModal bind:is_open={modal_open} activites={cache_ecs} uid={user?.uid} on:activity_added={activity_added} />
+<Spinner bind:show_spinner={spinner} />
+<RecommendationModal bind:is_open={recommendation_modal_open} uid={uid} />
 
 <main class="w-full min-h-screen bg-[#FFFCF1]">
     <NavBar />
@@ -83,7 +96,7 @@
                 <div class="bg-[#FFE8A3] p-4 rounded-lg shadow-xl w-full hover-effect">
                     <h1 class="text-xl font-bold text-center">Second major:<br />{user_data.major_2}</h1>
                 </div>
-                {#if activities.length > 0}
+                {#if activities.length >= 2}
                     <button class="bg-[#0D99FF] cursor-pointer p-4 rounded-lg shadow-xl w-full mt-4 hover-effect">
                         <h1 class="text-xl font-bold text-center text-white">Get Recommendations</h1>
                     </button>
@@ -109,14 +122,28 @@
                         <div class="overflow-y-auto space-y-2 max-h-[500px]">
                             {#each activities as activity, index (index)}
                                 <div
-                                    class="p-5 bg-[#E6E6E6] text-left rounded-lg flex flex-row space-x-3 hover-effect mx-7"
+                                    class="p-5 bg-[#E6E6E6] text-left rounded-lg flex flex-row justify-between items-center hover-effect mx-7"
                                 >
-                                    <img src={activity.image} alt="{activity.activity} image" class="w-40 my-auto" />
-                                    <div class="flex flex-col space-y-3 my-auto">
-                                        <h2 class="text-4xl">{activity.activity}</h2>
-                                        <p class="text-lg">
-                                            {activity.description}
-                                        </p>
+                                    <div class="flex flex-row space-x-2">
+                                        <img
+                                            src={activity.image}
+                                            alt="{activity.activity} image"
+                                            class="w-40 my-auto"
+                                        />
+                                        <div class="flex flex-col space-y-3">
+                                            <h2 class="text-4xl">{activity.activity}</h2>
+                                            <p class="text-lg">
+                                                {activity.description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col space-y-2 ml-auto">
+                                        <button
+                                            class="bg-[#0D99FF] cursor-pointer p-4 rounded-lg text-white text-xl"
+                                            on:click={() => delete_activity(index)}
+                                        >
+                                            Delete
+                                        </button>
                                     </div>
                                 </div>
                             {/each}
