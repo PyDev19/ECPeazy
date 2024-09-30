@@ -10,7 +10,7 @@ export type EC = {
     image: string,
     grades: string[],
     description: string,
-    categories: string
+    categories: string[]
 }
 
 export type Activity = { activity: string, description: string, grade: string, image: string }
